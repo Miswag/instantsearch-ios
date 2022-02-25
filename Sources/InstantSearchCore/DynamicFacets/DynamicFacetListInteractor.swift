@@ -51,15 +51,20 @@ public class DynamicFacetListInteractor {
   /// Storage for selectable facet list logic per attribute
   private var facetListPerAttribute: [Attribute: SelectableListInteractor<String, Facet>]
 
+  /// Set true to list disjunctive facets from searcher in orderedFacets
+  public var isDisjunctiveFacetingEnabled: Bool = false
+	
   /**
    - Parameters:
      - orderedFacets: Ordered list of attributed facets
      - selections: Mapping between a facet attribute and a set of selected  facet values
      - selectionModeForAttribute: Mapping between a facet attribute and a facet values selection mode. If not provided, the default selection mode is .single.
+     - isDisjunctiveFacetsEnabled: Set true to list disjunctive facets from searcher in orderedFacets
   */
   public init(orderedFacets: [AttributedFacets] = [],
               selections: [Attribute: Set<String>] = [:],
-              selectionModeForAttribute: [Attribute: SelectionMode] = [:]) {
+              selectionModeForAttribute: [Attribute: SelectionMode] = [:],
+			  isDisjunctiveFacetingEnabled:Bool = false) {
     self.orderedFacets = orderedFacets
     self.selections = selections
     self.onFacetOrderChanged = .init()
@@ -67,6 +72,7 @@ public class DynamicFacetListInteractor {
     self.onSelectionsComputed = .init()
     self.selectionModeForAttribute = selectionModeForAttribute
     self.facetListPerAttribute = [:]
+	self.isDisjunctiveFacetingEnabled = isDisjunctiveFacetingEnabled
     onFacetOrderChanged.fire(orderedFacets)
     onSelectionsChanged.fire(selections)
     updateInteractors()
