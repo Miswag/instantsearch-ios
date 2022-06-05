@@ -53,9 +53,9 @@ public extension DynamicFacetListInteractor {
 							})
 						}
 					}
-					print("====")
-					print("ordering",facetOrdering.facets.order)
-					print("++++")
+//					print("====")
+//					print("ordering",facetOrdering.facets.order)
+//					print("++++")
 					
 					/*
 					 
@@ -82,8 +82,8 @@ public extension DynamicFacetListInteractor {
 					
 					
 					interactor.orderedFacets = FacetsOrderer(facetOrder: facetOrdering, facets: facets)()
-					print("++++")
-					print("result",interactor.orderedFacets.compactMap({$0.attribute}))
+//					print("++++")
+//					print("result",interactor.orderedFacets.compactMap({$0.attribute}))
 				} else {
 					interactor.orderedFacets = []
 				}
