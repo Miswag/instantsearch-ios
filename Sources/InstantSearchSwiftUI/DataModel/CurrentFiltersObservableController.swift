@@ -33,5 +33,9 @@ public class CurrentFiltersObservableController: ObservableObject, CurrentFilter
     self.filters = filters
   }
 
+  public func remove(_ filter: FilterAndID) {
+    onRemoveItem?(filter)
+  }
+
 }
 #endif

@@ -8,9 +8,6 @@
 
 import Foundation
 
-@available(*, deprecated, renamed: "SearchConnector")
-public typealias SingleIndexSearchConnector = SearchConnector
-
 /**
  Connector encapsulating basic search experience within single index
  
@@ -32,11 +29,11 @@ public struct SearchConnector<Record: Codable>: Connection {
   /// Connection between hits interactor of hits connector and provided hits controller
   public let hitsControllerConnection: Connection
 
-  /// Connector establishing the linkage between searcher and query input interactor
-  public let queryInputConnector: QueryInputConnector
+  /// Connector establishing the linkage between searcher and search box interactor
+  public let searchBoxConnector: SearchBoxConnector
 
-  /// Connection between query input interactor of query input connector and provided query input controller
-  public let queryInputControllerConnection: Connection
+  /// Connection between query input interactor of search box connector and provided search box controller
+  public let searchBoxControllerConnection: Connection
 
   /// Connection between filter state and hits interactor of hits connector
   public let filterStateHitsInteractorConnection: Connection?
@@ -46,23 +43,23 @@ public struct SearchConnector<Record: Codable>: Connection {
 
   /**
    - Parameters:
-     - searcher: External single index sercher
-     - queryInputInteractor: External query input interactor
-     - queryInputController: Query input controller
-     - hitsInteractor: External hits interactor
-     - hitsController: Hits controller
-     - filterState: Filter state
-  */
-  public init<HC: HitsController, QI: QueryInputController>(searcher: HitsSearcher,
-                                                            queryInputInteractor: QueryInputInteractor = .init(),
-                                                            queryInputController: QI,
+   - searcher: External single index sercher
+   - searchBOxInteractor: External search box interactor
+   - searchBoxController: Search box controller
+   - hitsInteractor: External hits interactor
+   - hitsController: Hits controller
+   - filterState: Filter state
+   */
+  public init<HC: HitsController, SBC: SearchBoxController>(searcher: HitsSearcher,
+                                                            searchBoxInteractor: SearchBoxInteractor = .init(),
+                                                            searchBoxController: SBC,
                                                             hitsInteractor: HitsInteractor<Record>,
                                                             hitsController: HC,
                                                             filterState: FilterState? = nil) where HC.DataSource == HitsInteractor<Record> {
     hitsConnector = .init(searcher: searcher, interactor: hitsInteractor, filterState: filterState)
-    queryInputConnector = .init(searcher: searcher, interactor: queryInputInteractor)
+    searchBoxConnector = .init(searcher: searcher, interactor: searchBoxInteractor)
 
-    queryInputControllerConnection = queryInputInteractor.connectController(queryInputController)
+    searchBoxControllerConnection = searchBoxInteractor.connectController(searchBoxController)
     hitsControllerConnection = hitsInteractor.connectController(hitsController)
 
     if let filterState = filterState {
@@ -81,29 +78,29 @@ public struct SearchConnector<Record: Codable>: Connection {
 
   /**
    - Parameters:
-     - appID: Application ID
-     - apiKey: API Key
-     - indexName: Name of the index in which search will be performed
-     - queryInputInteractor: External query input interactor
-     - queryInputController: Query input controller
-     - hitsInteractor: External hits interactor
-     - hitsController: Hits controller
-     - filterState: Filter state
+   - appID: Application ID
+   - apiKey: API Key
+   - indexName: Name of the index in which search will be performed
+   - searchBoxInteractor: External search box interactor
+   - searchBoxController: Search box controller
+   - hitsInteractor: External hits interactor
+   - hitsController: Hits controller
+   - filterState: Filter state
    */
-  public init<HC: HitsController, QI: QueryInputController>(appID: ApplicationID,
+  public init<HC: HitsController, SBC: SearchBoxController>(appID: ApplicationID,
                                                             apiKey: APIKey,
                                                             indexName: IndexName,
-                                                            queryInputInteractor: QueryInputInteractor = .init(),
-                                                            queryInputController: QI,
+                                                            searchBoxInteractor: SearchBoxInteractor = .init(),
+                                                            searchBoxController: SBC,
                                                             hitsInteractor: HitsInteractor<Record>,
                                                             hitsController: HC,
                                                             filterState: FilterState? = nil)  where HC.DataSource == HitsInteractor<Record> {
     let searcher = HitsSearcher(appID: appID,
-                                       apiKey: apiKey,
-                                       indexName: indexName)
+                                apiKey: apiKey,
+                                indexName: indexName)
     self.init(searcher: searcher,
-              queryInputInteractor: queryInputInteractor,
-              queryInputController: queryInputController,
+              searchBoxInteractor: searchBoxInteractor,
+              searchBoxController: searchBoxController,
               hitsInteractor: hitsInteractor,
               hitsController: hitsController,
               filterState: filterState)
@@ -119,8 +116,8 @@ public struct SearchConnector<Record: Codable>: Connection {
 
   public func connect() {
     disconnect()
-    queryInputConnector.connect()
-    queryInputControllerConnection.connect()
+    searchBoxConnector.connect()
+    searchBoxControllerConnection.connect()
     hitsConnector.connect()
     hitsControllerConnection.connect()
     filterStateSearcherConnection?.connect()
@@ -128,12 +125,85 @@ public struct SearchConnector<Record: Codable>: Connection {
   }
 
   public func disconnect() {
-    queryInputConnector.disconnect()
-    queryInputControllerConnection.disconnect()
+    searchBoxConnector.disconnect()
+    searchBoxControllerConnection.disconnect()
     hitsConnector.disconnect()
     hitsControllerConnection.disconnect()
     filterStateSearcherConnection?.disconnect()
     filterStateHitsInteractorConnection?.disconnect()
+  }
+
+}
+
+@available(*, deprecated, renamed: "SearchConnector")
+public typealias SingleIndexSearchConnector = SearchConnector
+
+public extension SearchConnector {
+
+  /// Connector establishing the linkage between searcher and query input interactor
+  @available(*, deprecated, renamed: "searchBoxConnector")
+  var queryInputConnector: QueryInputConnector {
+    searchBoxConnector
+  }
+
+  /// Connection between query input interactor of query input connector and provided query input controller
+  @available(*, deprecated, renamed: "searchBoxControllerConnection")
+  var queryInputControllerConnection: Connection {
+    searchBoxControllerConnection
+  }
+
+  /**
+   - Parameters:
+   - searcher: External single index sercher
+   - queryInputInteractor: External query input interactor
+   - queryInputController: Query input controller
+   - hitsInteractor: External hits interactor
+   - hitsController: Hits controller
+   - filterState: Filter state
+   */
+  @available(*, deprecated, renamed: "init(searcher:searchBoxInteractor:searchBoxController:hitsInteractor:hitsController:filterState:)")
+  init<HC: HitsController, QIC: QueryInputController>(searcher: HitsSearcher,
+                                                      queryInputInteractor: QueryInputInteractor = .init(),
+                                                      queryInputController: QIC,
+                                                      hitsInteractor: HitsInteractor<Record>,
+                                                      hitsController: HC,
+                                                      filterState: FilterState? = nil) where HC.DataSource == HitsInteractor<Record> {
+    self.init(searcher: searcher,
+              searchBoxInteractor: queryInputInteractor,
+              searchBoxController: queryInputController,
+              hitsInteractor: hitsInteractor,
+              hitsController: hitsController,
+              filterState: filterState)
+  }
+
+  /**
+   - Parameters:
+   - appID: Application ID
+   - apiKey: API Key
+   - indexName: Name of the index in which search will be performed
+   - queryInputInteractor: External query input interactor
+   - queryInputController: Query input controller
+   - hitsInteractor: External hits interactor
+   - hitsController: Hits controller
+   - filterState: Filter state
+   */
+  @available(*, deprecated, renamed: "init(appID:apiKey:indexName:searchBoxInteractor:searchBoxController:hitsInteractor:hitsController:filterState:)")
+  init<HC: HitsController, SBC: SearchBoxController>(appID: ApplicationID,
+                                                     apiKey: APIKey,
+                                                     indexName: IndexName,
+                                                     queryInputInteractor: SearchBoxInteractor = .init(),
+                                                     queryInputController: SBC,
+                                                     hitsInteractor: HitsInteractor<Record>,
+                                                     hitsController: HC,
+                                                     filterState: FilterState? = nil)  where HC.DataSource == HitsInteractor<Record> {
+    self.init(appID: appID,
+              apiKey: apiKey,
+              indexName: indexName,
+              searchBoxInteractor: queryInputInteractor,
+              searchBoxController: queryInputController,
+              hitsInteractor: hitsInteractor,
+              hitsController: hitsController,
+              filterState: filterState)
   }
 
 }

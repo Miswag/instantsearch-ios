@@ -1,5 +1,56 @@
 # ChangeLog
 
+## [7.19.1](https://github.com/algolia/instantsearch-ios/compare/7.19.0...7.19.1) (2022-08-04)
+
+### Fix
+
+- **hierarchical**: deselect item (#236) ([804ca2b](https://github.com/algolia/instantsearch-ios/commit/804ca2b))
+
+
+
+## [7.19.0](https://github.com/algolia/instantsearch-ios/compare/...7.19.0) (2022-07-18)
+
+### Feat
+
+- NumberObservableController implementation (#233) ([7c9cfa9](https://github.com/algolia/instantsearch-ios/commit/7c9cfa9))
+
+### Fix
+
+- SwiftUI infinite scrolling issue (#228) ([6f924e3](https://github.com/algolia/instantsearch-ios/commit/6f924e3))
+
+### Chore
+
+- Update GitHub actions (#229) ([712e190](https://github.com/algolia/instantsearch-ios/commit/712e190))
+- Deprecate Boundable <-> Search Result Provider connection (#230) ([bbde414](https://github.com/algolia/instantsearch-ios/commit/bbde414))
+- Deprecate Answers components (#231) ([35e6848](https://github.com/algolia/instantsearch-ios/commit/35e6848))
+- Deprecate Places components (#232) ([180909a](https://github.com/algolia/instantsearch-ios/commit/180909a))
+
+
+
+## [7.18.0](https://github.com/algolia/instantsearch-ios/compare/...7.18.0) (2022-06-21)
+
+### Fix
+
+- Carthage build issue (#224) ([e3384dc](https://github.com/algolia/instantsearch-ios/commit/e3384dc))
+
+
+
+## [7.17.0](https://github.com/algolia/instantsearch-ios/compare/...7.17.0) (2022-05-22)
+
+### Feat
+
+- **CurrentFiltersObservableController**: add removal capability
+- **StatsObservableController**: add empty constructor
+- **SearchBar**: fix the appearance, make platform-agnostic
+- **QueryInput**: rename to **SearchBox**
+- **SelectableFilter**: rename to **FilterMap**
+
+### Chore
+
+- Migrate the demos from the separate [repository](https://github.com/algolia/instantsearch-ios-examples) (#217) ([a4fb97e](https://github.com/algolia/instantsearch-ios/commit/a4fb97e))
+- Declare json files used in unit tests as library resources and update the tests accordingly
+
+
 ## [7.16.0](https://github.com/algolia/instantsearch-ios/compare/7.15.0...7.16.0) (2021-12-15)
 
 ### Feat
