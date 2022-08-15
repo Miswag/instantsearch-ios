@@ -67,7 +67,7 @@ public extension DynamicFacetListInteractor {
 					 
 					 */
 					
-					let facetOrdering = FacetOrdering(facets: FacetsOrder(order: ["hierarchicalCategories.lvl0", "brand", "color_code","sizes.label","price_iqd"]),
+					let facetOrdering = FacetOrdering(facets: FacetsOrder(order: ["hierarchicalCategories.lvl0", "facet_brand", "variations.color_code","sizes","price.value"]),
 													  values: [:
 														/*
 														 "brand": FacetValuesOrder(
