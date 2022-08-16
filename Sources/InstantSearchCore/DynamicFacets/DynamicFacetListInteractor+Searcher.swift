@@ -53,37 +53,8 @@ public extension DynamicFacetListInteractor {
 							})
 						}
 					}
-//					print("====")
-//					print("ordering",facetOrdering.facets.order)
-//					print("++++")
-					
-					/*
-					 
-					 Overriding server facet ordering manually
-					 becuase I can't access HitsSearcher index object to set renderingContent like shown here
-					 link: https://www.algolia.com/doc/api-reference/api-parameters/renderingContent/
-					 
-					 and I couldn't implement it using the AlgoliaSearchClient becuase of framework issue
-					 
-					 */
-					
-					let facetOrdering = FacetOrdering(facets: FacetsOrder(order: ["hierarchicalCategories.lvl0", "facet_brand", "variations.color_code","sizes","price.value"]),
-													  values: [:
-														/*
-														 "brand": FacetValuesOrder(
-															order: ["uniqlo"],
-															sortRemainingBy: .count
-														),
-														"size": FacetValuesOrder(
-															order: ["S", "M", "L"],
-															sortRemainingBy: .hidden
-														)*/
-													  ])
-					
 					
 					interactor.orderedFacets = FacetsOrderer(facetOrder: facetOrdering, facets: facets)()
-//					print("++++")
-//					print("result",interactor.orderedFacets.compactMap({$0.attribute}))
 				} else {
 					interactor.orderedFacets = []
 				}
